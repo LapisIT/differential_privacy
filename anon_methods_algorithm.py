@@ -98,7 +98,7 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
 
         # We add a vector layer as output
         self.addOutput(OutputVector(self.OUTPUT_LAYER,
-            self.tr('Output layer with selected features')))
+            self.tr('Anonymized features')))
 
     def processAlgorithm(self, progress):
         """Here is where the processing itself takes place."""

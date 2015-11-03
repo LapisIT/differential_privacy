@@ -10,20 +10,37 @@
 name=Differential Privacy
 qgisMinimumVersion=2.0
 description=Methods for anonymizing data for public distribution
-version=0.1
+version=0.1.0
 author=Henry Walshaw
 email=henry.walshaw@spatialvision.com.au
 
-about=This plugin implements different methods for the anonymization of spatial data (typically point samples) with the goal of making the data publically available, while preserving the privacy of the individuals whose information the dataset contains. Credits: Toucan by Lane F. Kinkade from the Noun Project
+about=This plugin implements different methods for the anonymization of spatial
+    data (typically point samples) with the goal of making the data publically
+    available, while preserving the privacy of the individuals whose information
+    the dataset contains.
 
-tracker=https://github.com/om-henners/differential_privacy
+    The differential privacy algorithm is based on the algorithm outlined in [1]
+    and implemented by Konstantinos Chatzikokolakis in the Location Guard
+    browser extension [2].
+
+    Credits
+
+    [1] Andrés, M.E. et al., 2013. Geo-indistinguishability. In the 2013 ACM
+    SIGSAC conference. New York, New York, USA: ACM Press, pp. 901–914.
+
+    [2] https://github.com/chatziko/location-guard
+
+    Toucan by Lane F. Kinkade from the Noun Project
+
+tracker=https://github.com/om-henners/differential_privacy/issues
 repository=https://github.com/om-henners/differential_privacy
 # End of mandatory metadata
 
 # Recommended items:
 
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=0.1.0 (3rd November 2015): Initial version with independent
+    anonymization of points only.
 
 # Tags are comma separated with spaces allowed
 tags=analysis, point, metadata, statistics
