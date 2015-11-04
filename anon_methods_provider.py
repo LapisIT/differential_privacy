@@ -31,7 +31,9 @@ __revision__ = '$Format:%H$'
 
 from processing.core.AlgorithmProvider import AlgorithmProvider
 from processing.core.ProcessingConfig import Setting, ProcessingConfig
-from anon_methods_algorithm import DifferentialPrivacyAlgorithm
+from anon_methods_algorithm import (
+    DifferentialPrivacyAlgorithm, DisplacementLines
+)
 from anon_utils import DifferentialPrivacyUtils
 
 
@@ -45,7 +47,9 @@ class DifferentialPrivacyProvider(AlgorithmProvider):
         self.activate = False
 
         # Load algorithms
-        self.alglist = [DifferentialPrivacyAlgorithm()]
+        self.alglist = [
+            DifferentialPrivacyAlgorithm(), DisplacementLines()
+        ]
         for alg in self.alglist:
             alg.provider = self
 
