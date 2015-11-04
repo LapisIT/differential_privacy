@@ -10,7 +10,7 @@
 name=Differential Privacy
 qgisMinimumVersion=2.0
 description=Methods for anonymizing data for public distribution
-version=0.3.0
+version=0.4.0
 author=Henry Walshaw
 email=henry.walshaw@spatialvision.com.au
 
@@ -43,7 +43,10 @@ repository=https://github.com/SpatialVision/differential_privacy
 # Recommended items:
 
 # Uncomment the following line and add your changelog:
-changelog=0.3.0 (4th November 2015): Add the 95% confidence as an output of the
+changelog=0.4.0 (5th November 2015): Add option to limit shift distance to the 95%
+    confidence interval.
+
+    0.3.0 (4th November 2015): Add the 95% confidence as an output of the
     displacement tool, to be used (for example) as an input to a buffer operation.
 
     0.2.0 (4th November 2015): Add the displacement lines testing tool.

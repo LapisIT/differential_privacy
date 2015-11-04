@@ -39,7 +39,7 @@ from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.ProcessingConfig import ProcessingConfig
 from processing.core.ProcessingLog import ProcessingLog
 from processing.core.parameters import (
-    ParameterVector, ParameterNumber, ParameterTableField
+    ParameterVector, ParameterNumber, ParameterTableField, ParameterBoolean
 )
 from processing.core.outputs import OutputVector, OutputNumber
 from processing.tools import dataobjects, vector
@@ -66,6 +66,7 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
     INPUT_LAYER = 'INPUT_LAYER'
     PROTECTION_DISTANCE = 'PROTECTION_DISTANCE'
     NINETY_FIVE_DISTANCE = 'NINETY_FIVE_DISTANCE'
+    LIMIT_NINETY_FIVE = 'LIMIT_NINETY_FIVE'
 
     def getIcon(self):
         """Get the icon.
@@ -95,6 +96,12 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
             default=500
         ))
 
+        self.addParameter(ParameterBoolean(
+            self.LIMIT_NINETY_FIVE,
+            "Limit the distance moved to the 95% confidence interval",
+            default=False
+        ))
+
         # We add a vector layer as output
         self.addOutput(OutputVector(self.OUTPUT_LAYER,
             self.tr('Anonymized features')))
@@ -115,9 +122,11 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
 
         base_epsilon = float(ProcessingConfig.getSetting(
             DifferentialPrivacyUtils.DIFFERENTIAL_EPSILON))
-        epsilon = base_epsilon / radius
 
-        r_generator = gamma(2., scale=1. / epsilon)
+        limit_nine_five = self.getParameterValue(self.LIMIT_NINETY_FIVE)
+
+        # scale should be 1 / epsilon where epsilon is some base epsilon constant / chosen radius
+        r_generator = gamma(2., scale=radius / base_epsilon)
         theta_generator = uniform(scale=2 * np.pi)
 
         output = self.getOutputValue(self.OUTPUT_LAYER)
@@ -145,9 +154,14 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
         # selection that might exist in layer and the configuration that
         # indicates should algorithm use only selected features or all
         # of them
+
+        nine_five_distance = r_generator.ppf(0.95)
+
         features = vector.features(vectorLayer)
         for f in features:
             r = r_generator.rvs()
+            if limit_nine_five and r > nine_five_distance:
+                r = nine_five_distance
             theta = theta_generator.rvs()
 
             g = f.geometryAndOwnership()
@@ -158,12 +172,10 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
 
         ProcessingLog.addToLog(
             ProcessingLog.LOG_INFO,
-            "95% confiedence distance: {}".format(
-                np.around(r_generator.ppf(0.95), - int(np.log10(radius)))
-            )
+            "95% confiedence distance: {}".format(nine_five_distance)
         )
 
-        self.setOutputValue(self.NINETY_FIVE_DISTANCE, r_generator.ppf(0.95))
+        self.setOutputValue(self.NINETY_FIVE_DISTANCE, nine_five_distance)
 
 
     def help(self):
