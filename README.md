@@ -26,6 +26,8 @@ https://github.com/SpatialVision/differential_privacy
 
 ## Changelog
 
+* 0.3.0 (4th November 2015): Add the 95% confidence as an output of the
+  displacement tool, to be used (for example) as an input to a buffer operation.
+* 0.2.0 (4th November 2015): Add the displacement lines testing tool.
 * 0.1.0 (3rd November 2015): Initial version with independent anonymization of
   points only.
-* 0.2.0 (4th November 2015): Add the displacement lines testing tool.

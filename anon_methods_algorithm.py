@@ -41,7 +41,7 @@ from processing.core.ProcessingLog import ProcessingLog
 from processing.core.parameters import (
     ParameterVector, ParameterNumber, ParameterTableField
 )
-from processing.core.outputs import OutputVector
+from processing.core.outputs import OutputVector, OutputNumber
 from processing.tools import dataobjects, vector
 
 import numpy as np
@@ -65,6 +65,7 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
     OUTPUT_LAYER = 'OUTPUT_LAYER'
     INPUT_LAYER = 'INPUT_LAYER'
     PROTECTION_DISTANCE = 'PROTECTION_DISTANCE'
+    NINETY_FIVE_DISTANCE = 'NINETY_FIVE_DISTANCE'
 
     def getIcon(self):
         """Get the icon.
@@ -97,6 +98,11 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
         # We add a vector layer as output
         self.addOutput(OutputVector(self.OUTPUT_LAYER,
             self.tr('Anonymized features')))
+
+        self.addOutput(OutputNumber(
+            self.NINETY_FIVE_DISTANCE,
+            "95% confidence distance for offset"
+        ))
 
     def processAlgorithm(self, progress):
         """Here is where the processing itself takes place."""
@@ -157,10 +163,7 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
             )
         )
 
-        # There is nothing more to do here. We do not have to open the
-        # layer that we have created. The framework will take care of
-        # that, or will handle it if this algorithm is executed within
-        # a complex model
+        self.setOutputValue(self.NINETY_FIVE_DISTANCE, r_generator.ppf(0.95))
 
 
     def help(self):
