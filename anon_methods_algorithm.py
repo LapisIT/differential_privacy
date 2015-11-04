@@ -29,6 +29,8 @@ __copyright__ = '(C) 2015 by Henry Walshaw'
 
 __revision__ = '$Format:%H$'
 
+import os.path
+
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorFileWriter
 
@@ -91,7 +93,7 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
 
         self.addParameter(ParameterNumber(
             self.PROTECTION_DISTANCE,
-            self.tr('Protection distance (map units)'),
+            self.tr('Protection distance (projected units)'),
             minValue=0.,
             default=500
         ))
@@ -163,3 +165,18 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
         # layer that we have created. The framework will take care of
         # that, or will handle it if this algorithm is executed within
         # a complex model
+
+
+    def help(self):
+        """
+        Get the help documentation for this algorithm.
+        :return: Help text is html from string, the help html
+        :rtype: bool, str
+        """
+        help_data = open(os.path.join(
+            os.path.dirname(__file__),
+            "doc",
+            "independent_points.html"
+        )).read()
+
+        return True, help_data

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Differenential privacy - independent points</title>
+</head>
+<body>
+<h1>Differenential privacy - independent points</h1>
+<p>This algorithm implements the geo-indistinguishability algorithm as outlined
+in [1]. Noise is generated on a 2D laplacian distribution based on the epsilon
+value set in the plugin settings and the protection distance set in the tool.
+The noise is generated and applied to each point individually within the
+dataset - i.e. it assumes that the location of each points is completely
+independent of the location of any other point within the dataset. As such
+spatial statistics will only be relatively accurate based on the privacy level
+set in the tool.</p>
+
+<h2>Input parameters</h2>
+
+<h3>Input layer</h3>
+
+<p>Any point layer may be used as input. Note that the calculation is done on
+a 2d plane in the projected units so care should be taken when looking at the
+projection of the incoming dataset.</p>
+
+<h3>Protection distance (projected units)</h3>
+
+<p>An offset distance for the noise calculation. Approximately 59% of points
+will be within this distance of their origin.</p>
+
+<h2>Output parameters</h2>
+
+<h3>Anonymized features</h3>
+
+<p>A dataset with all the original attributes of the original dataset with the
+points offset by a random amount. Note the offset of each point is independent
+so if the spatial autocorrelation of the data is important at the original
+resolution the utility may be lost using this tool.</p>
+
+<p>[1] Andrés, M.E., Bordenabe, N.E., Chatzikokolakis, K., and Palamidessi, P.
+2013. 'Geo-indistinguishability: Differential Privacy for Location-Based
+Systems', <em>In the Proceedings of the 2013 ACM SIGSAC conference on Computer
+and Communications Security (CCS'13)</em>. New York, New York, USA: ACM Press,
+pp. 901–914.</p>
+
+</body>
+</html>
