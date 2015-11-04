@@ -79,7 +79,7 @@ class DifferentialPrivacyAlgorithm(GeoAlgorithm):
         """
 
         # The name that the user will see in the toolbox
-        self.name = 'Differential Privacy'
+        self.name = 'Differential Privacy - independent points'
 
         # The branch of the toolbox under which the algorithm will appear
         self.group = 'Vector'
