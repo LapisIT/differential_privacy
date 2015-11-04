@@ -340,7 +340,7 @@ class DisplacementLines(GeoAlgorithm):
         help_data = open(os.path.join(
             os.path.dirname(__file__),
             "doc",
-            "independent_points.html"
+            "displacement_lines.html"
         )).read()
 
         return True, help_data

@@ -26,5 +26,6 @@ https://github.com/SpatialVision/differential_privacy
 
 ## Changelog
 
-* 0.1.0 (3rd November 2015): Initial version with independent anonymization of 
+* 0.1.0 (3rd November 2015): Initial version with independent anonymization of
   points only.
+* 0.2.0 (4th November 2015): Add the displacement lines testing tool.
