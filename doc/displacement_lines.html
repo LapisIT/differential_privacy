@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Displacement lines</title>
+</head>
+<body>
+<h1>Displacement lines</h1>
+<p>This tool build lines based on the original base points dataset and the
+    output displaced points. This is more for testing, but can be used as an
+    easy visualisation of how far points have moved.</p>
+
+<h2>Input parameters</h2>
+
+<h3>Base layer</h3>
+
+<p>The base point dataset. Note that not all the points in this dataset are
+    required to be in the output so you can use the base dataset to link to
+    displaced points which were the subset of the input.</p>
+
+<h3>Base layer ID field</h3>
+
+<p>The ID field from the base layer that is used to link to the displaced
+    points.</p>
+
+<h3>Displaced layer</h3>
+
+<p>The layer of displaced points generated from the input layer. All points in
+this layer should also be present in the base layer. If they are not IDs will be
+written as warnings in the log.</p>
+
+<h3>Displaced layer ID field</h3>
+
+<p>The ID field from the displaced points to link to the original base dataset.
+    Allowing for different ID fields gives the tool a bit more utility, and
+    allows for you to make updates to the displaced points layer.</p>
+
+<h2>Output parameters</h2>
+
+<h3>Displacement lines</h3>
+
+<p>A polyline dataset with points built from the points in the base layer to the
+    corresponding points in the output layer. The points are attributed with the
+    ID of the shared points.</p>
+
+</body>
+</html>
