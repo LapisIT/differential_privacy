@@ -7,7 +7,7 @@
 <body>
 <h1>Differenential privacy - independent points</h1>
 <p>This algorithm implements the geo-indistinguishability algorithm as outlined
-in [1]. Noise is generated on a 2D laplacian distribution based on the epsilon
+in <a href="#ref_1">[1]</a>. Noise is generated on a 2D laplacian distribution based on the epsilon
 value set in the plugin settings and the protection distance set in the tool.
 The noise is generated and applied to each point individually within the
 dataset - i.e. it assumes that the location of each points is completely
@@ -37,11 +37,13 @@ points offset by a random amount. Note the offset of each point is independent
 so if the spatial autocorrelation of the data is important at the original
 resolution the utility may be lost using this tool.</p>
 
-<p>[1] Andrés, M.E., Bordenabe, N.E., Chatzikokolakis, K., and Palamidessi, P.
+<h2>References</h2>
+
+<p><a name="ref_1">[1]</a> Andrés, M.E., Bordenabe, N.E., Chatzikokolakis, K., and Palamidessi, P.
 2013. 'Geo-indistinguishability: Differential Privacy for Location-Based
 Systems', <em>In the Proceedings of the 2013 ACM SIGSAC conference on Computer
 and Communications Security (CCS'13)</em>. New York, New York, USA: ACM Press,
-pp. 901–914.</p>
+pp. 901–914. Online at <a href="http://arxiv.org/abs/1212.1984v3">http://arxiv.org/abs/1212.1984v3</a></p>
 
 </body>
 </html>

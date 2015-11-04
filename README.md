@@ -15,7 +15,7 @@ browser extension [2].
 2013. 'Geo-indistinguishability: Differential Privacy for Location-Based
 Systems', *In the Proceedings of the 2013 ACM SIGSAC conference on Computer
 and Communications Security (CCS'13)*. New York, New York, USA: ACM Press,
-pp. 901–914.
+pp. 901–914. Online at http://arxiv.org/abs/1212.1984v3
 
 [2] https://github.com/chatziko/location-guard
 
