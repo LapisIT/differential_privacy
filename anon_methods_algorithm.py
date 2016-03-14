@@ -33,7 +33,7 @@ import os.path
 
 from PyQt4.QtCore import QSettings
 from qgis.core import (
-    QgsVectorFileWriter, QgsFields, QGis, QgsFeature, QgsGeometry)
+    QgsVectorFileWriter, QgsFields, QGis, QgsFeature, QgsGeometry, QgsPoint)
 
 from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.ProcessingConfig import ProcessingConfig
@@ -356,6 +356,127 @@ class DisplacementLines(GeoAlgorithm):
             os.path.dirname(__file__),
             "doc",
             "displacement_lines.html"
+        )).read()
+
+        return True, help_data
+
+
+class GridBasedMasking(GeoAlgorithm):
+    """
+    Grid based masking algorithm as described in:
+
+    Seidl, D.E., Jankowski, P. & Tsou, M.-H., 2015. Privacy and spatial pattern
+    preservation in masked GPS trajectory data. International Journal of
+    Geographical Information Science, 30(4), pp.785–800.
+    """
+
+    OUTPUT_LAYER = 'OUTPUT_LAYER'
+    INPUT_LAYER = 'INPUT_LAYER'
+    GRID_SIZE = 'GRID_SIZE'
+
+    def getIcon(self):
+        """Get the icon.
+        """
+        return DifferentialPrivacyUtils.getIcon()
+
+    def defineCharacteristics(self):
+        """Here we define the inputs and output of the algorithm, along
+        with some other properties.
+        """
+        self.name = 'Grid based masking'
+
+        # The branch of the toolbox under which the algorithm will appear
+        self.group = 'Vector'
+
+        # We add the input vector layer. It can have any kind of geometry
+        # It is a mandatory (not optional) one, hence the False argument
+        self.addParameter(ParameterVector(
+            self.INPUT_LAYER,
+            self.tr('Input layer'),
+            [ParameterVector.VECTOR_TYPE_POINT],
+            False
+        ))
+
+        self.addParameter(ParameterNumber(
+            self.GRID_SIZE,
+            self.tr('Grid size'),
+            minValue=0.,
+            default=500
+        ))
+
+        # We add a vector layer as output
+        self.addOutput(OutputVector(self.OUTPUT_LAYER,
+                                    self.tr('Anonymized features')))
+
+    def round_to_grid(self, point, cell_size):
+        """
+        Round the coordinates of a point to the points of a grid.
+
+        :param point: The moint to migrate.
+        :type point: QgsPoint
+        :param cell_size: Size of the grid to round towards
+        :type cell_size: float
+        :return: The migrated point
+        :rtype: QgsPoint
+        """
+        xy = np.array([point.x(), point.y()])
+        new_xy = np.round(xy / cell_size) * cell_size
+
+        return QgsPoint(*new_xy)
+
+    def processAlgorithm(self, progress):
+        """Here is where the processing itself takes place."""
+
+        # The first thing to do is retrieve the values of the parameters
+        # entered by the user
+        inputFilename = self.getParameterValue(self.INPUT_LAYER)
+        grid_size = float(self.getParameterValue(self.GRID_SIZE))
+
+        output = self.getOutputValue(self.OUTPUT_LAYER)
+
+        # Input layers vales are always a string with its location.
+        # That string can be converted into a QGIS object (a
+        # QgsVectorLayer in this case) using the
+        # processing.getObjectFromUri() method.
+        vectorLayer = dataobjects.getObjectFromUri(inputFilename)
+
+        # And now we can process
+
+        # First we create the output layer. The output value entered by
+        # the user is a string containing a filename, so we can use it
+        # directly
+        settings = QSettings()
+        systemEncoding = settings.value('/UI/encoding', 'System')
+        provider = vectorLayer.dataProvider()
+        writer = QgsVectorFileWriter(output, systemEncoding,
+                                     provider.fields(),
+                                     provider.geometryType(), provider.crs())
+
+        # Now we take the features from input layer and add them to the
+        # output. Method features() returns an iterator, considering the
+        # selection that might exist in layer and the configuration that
+        # indicates should algorithm use only selected features or all
+        # of them
+
+        features = vector.features(vectorLayer)
+        for f in features:
+            g = f.geometryAndOwnership()
+            new_point = self.round_to_grid(g.asPoint(), grid_size)
+            f.setGeometry(QgsGeometry.fromPoint(new_point))
+
+            writer.addFeature(f)
+
+    def help(self):
+        """
+        Get the help documentation for this algorithm.
+
+        :return: Help text is html from string, the help html
+        :rtype: bool, str
+        """
+        help_data = open(os.path.join(
+            os.path.dirname(__file__),
+            "doc",
+            "grid_based_masking.html"
         )).read()
 
         return True, help_data
