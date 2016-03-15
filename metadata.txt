@@ -10,7 +10,7 @@
 name=Differential Privacy
 qgisMinimumVersion=2.0
 description=Methods for anonymizing data for public distribution
-version=0.5.0
+version=0.5.1
 author=Henry Walshaw
 email=henry.walshaw@spatialvision.com.au
 
@@ -51,7 +51,9 @@ repository=https://github.com/SpatialVision/differential_privacy
 # Recommended items:
 
 # Uncomment the following line and add your changelog:
-changelog=0.5.0 (14th March 2016): Add grid based anonymisation method to the
+changelog=0.5.1 (15th March 2016) Add an x and y offset for the grid tool.
+
+    0.5.0 (14th March 2016): Add grid based anonymisation method to the
     tool.
 
     0.4.0 (5th November 2015): Add option to limit shift distance to the 95%

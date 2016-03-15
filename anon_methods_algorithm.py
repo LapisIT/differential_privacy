@@ -373,6 +373,8 @@ class GridBasedMasking(GeoAlgorithm):
     OUTPUT_LAYER = 'OUTPUT_LAYER'
     INPUT_LAYER = 'INPUT_LAYER'
     GRID_SIZE = 'GRID_SIZE'
+    X_OFFSET = 'X_OFFSET'
+    Y_OFFSET = 'Y_OFFSET'
 
     def getIcon(self):
         """Get the icon.
@@ -408,7 +410,19 @@ class GridBasedMasking(GeoAlgorithm):
         self.addOutput(OutputVector(self.OUTPUT_LAYER,
                                     self.tr('Anonymized features')))
 
-    def round_to_grid(self, point, cell_size):
+        self.addParameter(ParameterNumber(
+            self.X_OFFSET,
+            "X grid offset",
+            minValue=0.0
+        ))
+
+        self.addParameter(ParameterNumber(
+            self.Y_OFFSET,
+            "Y grid offset",
+            minValue=0.0
+        ))
+
+    def round_to_grid(self, point, cell_size, x_offset, y_offset):
         """
         Round the coordinates of a point to the points of a grid.
 
@@ -419,8 +433,8 @@ class GridBasedMasking(GeoAlgorithm):
         :return: The migrated point
         :rtype: QgsPoint
         """
-        xy = np.array([point.x(), point.y()])
-        new_xy = np.round(xy / cell_size) * cell_size
+        xy = np.array([point.x(), point.y()]) - np.array([x_offset, y_offset])
+        new_xy = np.round(xy / cell_size) * cell_size + np.array([x_offset, y_offset])
 
         return QgsPoint(*new_xy)
 
@@ -431,6 +445,8 @@ class GridBasedMasking(GeoAlgorithm):
         # entered by the user
         inputFilename = self.getParameterValue(self.INPUT_LAYER)
         grid_size = float(self.getParameterValue(self.GRID_SIZE))
+        x_offset = float(self.getParameterValue(self.X_OFFSET))
+        y_offset = float(self.getParameterValue(self.Y_OFFSET))
 
         output = self.getOutputValue(self.OUTPUT_LAYER)
 
@@ -461,7 +477,8 @@ class GridBasedMasking(GeoAlgorithm):
         features = vector.features(vectorLayer)
         for f in features:
             g = f.geometryAndOwnership()
-            new_point = self.round_to_grid(g.asPoint(), grid_size)
+            new_point = self.round_to_grid(
+                g.asPoint(), grid_size, x_offset, y_offset)
             f.setGeometry(QgsGeometry.fromPoint(new_point))
 
             writer.addFeature(f)
